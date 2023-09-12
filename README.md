@@ -15,36 +15,68 @@ ChainDots Challenge
       # para ejecutar este paso es necesario tener agregado el ssh key
       git clone git@github.com:hbrunacci/chaindots_challenge.git
    ```
+* Entrar en la carpeta del proyecto y crear el archivo .env, luego editarlo o dejar 
+  los valor por default para entorno de pruebas.
+  ``` bash
+     # ingresar a la carpeta del proyecto
+     cd chaindots_challenge
+     # crear archivo .env
+     cp .env.template .env
+     # Se puede editar el archivo para cambiar parametros
+  
+   ```
 
 * levantar el proyecto con docker-compose
    ``` bash
       # en la shell abrir la ruta del proyecto y luego
+      docker-compose build
       docker-compose up
    ```
   esto va levantar los contenedores necesarios para que funcione el backend
 
-  * utilizando el navegador podes acceder al proyecto en la siguiente ruta 
-    EndPoints Info:
-
-      ``` bash
-      http://localhost:8000/admin/
-      # Endpoints info on JSON format
-      http://localhost:8000/swagger.json/  
-      # Endpoints info on YAML format
-      http://localhost:8000/swagger.yaml/
-      # Endpoints info view
-      http://localhost:8000/swagger/ 
-      # Endpoints ReDoc view
-      http://localhost:8000/redoc/  
-
-       ```
-  
-* en caso de ser necesario podrias crear un usuario superadmin personalizado
+* Es necesario crear un usuario superadmin personalizado para poder probar el proyecto
    ``` bash
       # crear superadmin usando docker-compose 
       docker-compose run --rm django python manage.py createsuperuser
       # responsder las preguntas del asistente
    ```
+* utilizando el navegador podes acceder al proyecto en la siguiente ruta 
+  EndPoints Info:
+
+    ``` bash
+    http://localhost:8000/admin/
+    # Endpoints info on JSON format
+    http://localhost:8000/swagger.json/  
+    # Endpoints info on YAML format
+    http://localhost:8000/swagger.yaml/
+    # Endpoints info view
+    http://localhost:8000/swagger/ 
+    # Endpoints ReDoc view
+    http://localhost:8000/redoc/  
+     ```
+  
+  * En swagger generar el token con las credenciales del usuario admin 
+      ``` bash
+    curl -X 'POST' \
+    'http://127.0.0.1:8000/api-token-auth/' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -H 'X-CSRFToken: KtrLkGEigDGvMlD4EiY63ZlbURHJeds7NtjVmj3bLMr40xtP1PrelW1a1pDQ3mmW' \
+    -d '{
+    "username": "admin",
+    "password": "admin"
+      }'
+    ```
+    * de la respuesta tomar el token
+    ``` bash
+      {
+         "token": "3828eccf6bae1cae8f401b52150f75ea40d908a3"
+       }
+    ```
+    * Una vez dentro de swagger en el boton que dice "Authorize" colocar la frase:
+    ```bash
+    Token <token copiado anteriormente>
+    # para que quede : "Token 3828eccf6bae1cae8f401b52150f75ea40d908a3" dentro del recuadro
 
 
 Challenge 
